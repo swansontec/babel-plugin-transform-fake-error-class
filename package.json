@@ -1,10 +1,16 @@
 {
   "name": "babel-plugin-transform-fake-error-class",
   "version": "0.1.0",
-  "private": true,
   "description": "Transform error classes into error-returning functions",
   "license": "MIT",
   "author": "William Swanson <swansontec@gmail.com>",
+  "files": [
+    "/CHANGELOG.md",
+    "/lib/*",
+    "/package.json",
+    "/README.md",
+    "/src/*"
+  ],
   "main": "lib/index.js",
   "scripts": {
     "fix": "npm run lint -- --fix",
