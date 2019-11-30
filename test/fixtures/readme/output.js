@@ -1,5 +1,5 @@
 function MyError(message) {
-  if (!(this instanceof MyError)) throw new TypeError("This constructor must be called with new");
+  if (!(this instanceof MyError)) throw new TypeError("Class constructor MyError cannot be invoked without 'new'");
 
   var _this;
 

@@ -1,5 +1,5 @@
 export function MyError(message) {
-  if (!(this instanceof MyError)) throw new TypeError("This constructor must be called with new");
+  if (!(this instanceof MyError)) throw new TypeError("Class constructor MyError cannot be invoked without 'new'");
 
   var _this;
 
@@ -8,7 +8,7 @@ export function MyError(message) {
 }
 export class ReferenceError extends ReferenceError {}
 export default function _default(message) {
-  if (!(this instanceof _default)) throw new TypeError("This constructor must be called with new");
+  if (!(this instanceof _default)) throw new TypeError("Class constructor _default cannot be invoked without 'new'");
 
   var _this;
 

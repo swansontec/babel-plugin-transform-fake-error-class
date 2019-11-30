@@ -319,7 +319,9 @@ export function buildCheckNew(outputId: t.Identifier): t.Statement {
     ),
     t.throwStatement(
       t.newExpression(t.identifier('TypeError'), [
-        t.stringLiteral('This constructor must be called with new')
+        t.stringLiteral(
+          `Class constructor ${outputId.name} cannot be invoked without 'new'`
+        )
       ])
     )
   )

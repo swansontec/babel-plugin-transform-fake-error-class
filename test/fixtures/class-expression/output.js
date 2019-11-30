@@ -1,5 +1,5 @@
 export const AnonymousError = function AnonymousError(message) {
-  if (!(this instanceof AnonymousError)) throw new TypeError("This constructor must be called with new");
+  if (!(this instanceof AnonymousError)) throw new TypeError("Class constructor AnonymousError cannot be invoked without 'new'");
 
   var _this;
 
@@ -7,7 +7,7 @@ export const AnonymousError = function AnonymousError(message) {
   return _this;
 };
 export const NamedError = function Expression(message) {
-  if (!(this instanceof Expression)) throw new TypeError("This constructor must be called with new");
+  if (!(this instanceof Expression)) throw new TypeError("Class constructor Expression cannot be invoked without 'new'");
 
   var _this;
 
@@ -17,7 +17,7 @@ export const NamedError = function Expression(message) {
 export const CircularError = class ReferenceError extends ReferenceError {};
 export const o = {
   SyntaxError: function _SyntaxError(message) {
-    if (!(this instanceof _SyntaxError)) throw new TypeError("This constructor must be called with new");
+    if (!(this instanceof _SyntaxError)) throw new TypeError("Class constructor _SyntaxError cannot be invoked without 'new'");
 
     var _this;
 
