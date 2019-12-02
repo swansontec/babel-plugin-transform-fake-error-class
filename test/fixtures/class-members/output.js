@@ -33,6 +33,7 @@ export function MyError(message) {
       configurable: true,
       writable: true
     });
+    return _this;
   }
 
   if (message.length > 10) {

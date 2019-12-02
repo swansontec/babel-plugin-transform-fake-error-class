@@ -138,7 +138,7 @@ export function extractClassMembers(
         t.functionDeclaration(
           outputIds.superId,
           superShape.params,
-          t.blockStatement(superBody)
+          t.blockStatement([...superBody, t.returnStatement(outputIds.thisId)])
         )
       )
       return { output }
