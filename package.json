@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-fake-error-class",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Transform error classes into error-returning functions",
   "license": "MIT",
   "author": "William Swanson <swansontec@gmail.com>",
