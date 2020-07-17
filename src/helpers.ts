@@ -1,5 +1,4 @@
-import { NodePath } from '@babel/traverse'
-import * as t from '@babel/types'
+import { NodePath, types as t } from '@babel/core'
 
 export function isDecorated(path: NodePath): boolean {
   const decorators = path.get('decorators')

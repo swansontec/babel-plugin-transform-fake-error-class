@@ -1,5 +1,4 @@
-import babel, { PluginObj, Visitor } from '@babel/core'
-import * as t from '@babel/types'
+import babel, { PluginObj, types as t, Visitor } from '@babel/core'
 
 import {
   buildCheckNew,
