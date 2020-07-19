@@ -65,7 +65,7 @@ const visitor: Visitor<State> = {
   }
 }
 
-export default function(babel: Babel): PluginObj<State> {
+export default function (babel: Babel): PluginObj<State> {
   return {
     name: 'fake-error-class',
     visitor

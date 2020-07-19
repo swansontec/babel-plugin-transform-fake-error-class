@@ -12,7 +12,7 @@ import plugin from '../src/index'
 /**
  * Based on @babel/helper-plugin-test-runner, but works in mocha.
  */
-describe('babel-plugin-transform-fake-error-class', function() {
+describe('babel-plugin-transform-fake-error-class', function () {
   const fixturesDir = join(__dirname, 'fixtures')
   const fixtures = readdirSync(fixturesDir)
 
@@ -21,7 +21,7 @@ describe('babel-plugin-transform-fake-error-class', function() {
     const topPath = join(fixturesDir, fixture)
     const topSource = tryRead(topPath)
     if (topSource != null) {
-      it(`${fixture} runs`, function() {
+      it(`${fixture} runs`, function () {
         const code = transformFile(topPath, topSource)
         new Function('expect', code)(expect)
       })
@@ -32,7 +32,7 @@ describe('babel-plugin-transform-fake-error-class', function() {
     const execPath = join(fixturesDir, fixture, 'exec.js')
     const execSource = tryRead(execPath)
     if (execSource != null) {
-      it(`${fixture} runs`, function() {
+      it(`${fixture} runs`, function () {
         const code = transformFile(execPath, execSource)
         new Function('expect', code)(expect)
       })
@@ -42,7 +42,7 @@ describe('babel-plugin-transform-fake-error-class', function() {
     const inputPath = join(fixturesDir, fixture, 'input.js')
     const inputSource = tryRead(inputPath)
     if (inputSource != null) {
-      it(`${fixture} matches`, function() {
+      it(`${fixture} matches`, function () {
         const code = transformFile(inputPath, inputSource)
         const outputPath = join(fixturesDir, fixture, 'output.js')
         const outputSource = tryRead(outputPath)

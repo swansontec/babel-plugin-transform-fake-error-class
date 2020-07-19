@@ -1,6 +1,6 @@
 import { NodePath, types as t } from '@babel/core'
 
-export function isDecorated(path: NodePath): boolean {
+export function isDecorated(path: NodePath<any>): boolean {
   const decorators = path.get('decorators')
   return (
     decorators != null && Array.isArray(decorators) && decorators.length > 0
@@ -70,9 +70,8 @@ export function extractClassMembers(
   const superBody: t.Statement[] = []
   let constructor: NodePath<t.ClassMethod> | undefined
 
-  const bodyPath = classPath.get('body.body')
-  const memberPaths = Array.isArray(bodyPath) ? bodyPath : [bodyPath]
-  for (const memberPath of memberPaths) {
+  const bodyPath = classPath.get('body').get('body')
+  for (const memberPath of bodyPath) {
     if (isDecorated(memberPath)) {
       throw memberPath.buildCodeFrameError(
         "Error class members can't be decorated"
@@ -80,20 +79,21 @@ export function extractClassMembers(
     }
 
     if (memberPath.isClassMethod()) {
-      if (memberPath.node.kind === 'constructor') {
-        constructor = memberPath
+      const methodPath: NodePath<t.ClassMethod> = memberPath
+      if (methodPath.node.kind === 'constructor') {
+        constructor = methodPath
         continue
       }
 
-      if (memberPath.node.static) {
-        throw memberPath.buildCodeFrameError(
+      if (methodPath.node.static) {
+        throw methodPath.buildCodeFrameError(
           "Error class methods can't be static (TODO)"
         )
       }
 
-      cleanScope(memberPath, outputIds)
-      fixMember(memberPath, outputIds)
-      const { key, params, body, kind } = memberPath.node
+      cleanScope(methodPath, outputIds)
+      fixMember(methodPath, outputIds)
+      const { key, params, body, kind } = methodPath.node
       const value = t.functionExpression(
         t.isIdentifier(key) ? key : undefined,
         params,
@@ -102,10 +102,11 @@ export function extractClassMembers(
       const type = kind === 'get' || kind === 'set' ? kind : 'value'
       superBody.push(buildDefineProperty(outputIds.thisId, key, value, type))
     } else if (memberPath.isClassProperty()) {
-      const value = memberPath.get('value')
+      const propPath: NodePath<t.ClassProperty> = memberPath
+      const value = propPath.get('value')
       if (!value.isExpression()) continue
-      if (memberPath.node.static) {
-        throw memberPath.buildCodeFrameError(
+      if (propPath.node.static) {
+        throw propPath.buildCodeFrameError(
           "Error class properties can't be static (TODO)"
         )
       }
@@ -115,7 +116,7 @@ export function extractClassMembers(
         t.expressionStatement(
           t.assignmentExpression(
             '=',
-            t.memberExpression(outputIds.thisId, memberPath.node.key),
+            t.memberExpression(outputIds.thisId, propPath.node.key),
             value.node
           )
         )
@@ -186,7 +187,7 @@ export function extractConstructorBody(
  * - super(...args) to superId(...args) or _this = new errorId(...args)
  */
 function fixMember(
-  memberPath: NodePath,
+  memberPath: NodePath<any>,
   outputIds: OutputIds,
   callSuper?: boolean
 ): void {
@@ -265,7 +266,7 @@ function fixMember(
  * that might shadow what we need.
  */
 function cleanScope(
-  path: NodePath,
+  path: NodePath<any>,
   outputIds: OutputIds,
   callSuper?: boolean
 ): void {
