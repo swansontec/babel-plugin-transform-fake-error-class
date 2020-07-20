@@ -1,11 +1,8 @@
 import babel, { PluginObj, types as t, Visitor } from '@babel/core'
 
-import {
-  buildCheckNew,
-  extractClassMembers,
-  isDecorated,
-  pickOutputName
-} from './helpers'
+import { buildCtorShape, buildStatics } from './building'
+import { extractClassShape } from './class-shape'
+import { pickOutputId } from './naming'
 
 type Babel = typeof babel
 
@@ -31,37 +28,47 @@ const visitor: Visitor<State> = {
     if (!classPath.scope.hasGlobal(superClass.name)) return
     if (errors.indexOf(superClass.name) < 0) return
 
-    // We don't do decorations:
-    if (isDecorated(classPath)) {
-      throw classPath.buildCodeFrameError("Error classes can't be decorated")
-    }
+    // Pick some names:
+    const classShape = extractClassShape(classPath)
+    const baseId = superClass
+    const outputId = pickOutputId(classPath, baseId)
 
-    // What should we call everything?
-    const errorName = superClass.name
-    const outputIds = {
-      errorId: t.identifier(errorName),
-      outputId: t.identifier(pickOutputName(classPath, errorName)),
-      thisId: t.identifier('_this'),
-      superId: t.identifier('_super')
-    }
-
-    // Sort the members into buckets:
-    const { output } = extractClassMembers(classPath, outputIds)
-
-    // Build the function body:
-    const statements: t.Statement[] = [
-      buildCheckNew(outputIds.outputId),
-      t.variableDeclaration('var', [t.variableDeclarator(outputIds.thisId)]),
-      ...output.body,
-      t.returnStatement(outputIds.thisId)
-    ]
+    // Build our fake constructor function:
+    const ctorShape = buildCtorShape(classShape, baseId, outputId)
+    const statics = buildStatics(classShape, baseId, outputId)
 
     // Replace the class with the function:
-    const body = t.blockStatement(statements)
-    const replacement = classPath.isClassExpression()
-      ? t.functionExpression(outputIds.outputId, output.params, body)
-      : t.functionDeclaration(outputIds.outputId, output.params, body)
-    classPath.replaceWith(replacement)
+    const body = t.blockStatement(ctorShape.body)
+    if (classPath.isClassDeclaration()) {
+      // Just put the declaration back where it came from:
+      classPath.replaceWith(
+        t.functionDeclaration(outputId, ctorShape.params, body)
+      )
+      // Put the statics in as well:
+      classPath.insertAfter(statics)
+    } else if (statics.length === 0) {
+      // Just put the expression back where it came from:
+      classPath.replaceWith(
+        t.functionExpression(outputId, ctorShape.params, body)
+      )
+    } else {
+      // We need an IIFE to set up our statics:
+      const iife = t.callExpression(
+        t.parenthesizedExpression(
+          t.functionExpression(
+            undefined,
+            [],
+            t.blockStatement([
+              t.functionDeclaration(outputId, ctorShape.params, body),
+              ...statics,
+              t.returnStatement(outputId)
+            ])
+          )
+        ),
+        []
+      )
+      classPath.replaceWith(iife)
+    }
   }
 }
 

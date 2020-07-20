@@ -25,13 +25,19 @@ function MyError(message) {
 
 This works almost perfectly in both old and new environments. You still call `new MyError()`, just as before, properties like `name` appear as they should, and stack traces look perfect, but under the hood this is no longer a class. That means `instanceof MyError` will always return false, but that's the only major downside.
 
-This plugin also supports methods and class properties, but not static ones yet:
+This plugin also supports methods and class properties, including static ones:
 
 ```javascript
 class MyError extends Error {
   name = 'MyError'
-  getReason() {}
-  static todo() {} // Not yet supported
+
+  static isMyError(error) {
+    return error.constructor === MyError
+  }
+
+  getReason() {
+    return this.message
+  }
 }
 ```
 

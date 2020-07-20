@@ -4,6 +4,16 @@ export function MyError(message) {
   var _this;
 
   _this = new Error(message);
+  Object.defineProperty(_this, "constructor", {
+    value: MyError,
+    configurable: true,
+    writable: true
+  });
+  Object.defineProperty(_this, "method", {
+    value: function method() {},
+    configurable: true,
+    writable: true
+  });
   _this.name = 'MyError';
   return _this;
 }

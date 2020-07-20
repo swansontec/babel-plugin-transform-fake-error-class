@@ -3,7 +3,18 @@ export function MyError(message) {
 
   var _this;
 
-  _this = new Error(message + '!');
+  function _super(message) {
+    _this = new Error(message);
+    Object.defineProperty(_this, "constructor", {
+      value: MyError,
+      configurable: true,
+      writable: true
+    });
+    return _this;
+  }
+
+  _super(message + '!');
+
   _this.name = 'MyError';
   return _this;
 }
