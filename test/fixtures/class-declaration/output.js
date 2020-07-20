@@ -6,7 +6,6 @@ export function MyError(message) {
   _this = new Error(message);
   return _this;
 }
-export class ReferenceError extends ReferenceError {}
 export default function _default(message) {
   if (!(this instanceof _default)) throw new TypeError("Class constructor _default cannot be invoked without 'new'");
 
