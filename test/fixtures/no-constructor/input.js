@@ -1,3 +1,3 @@
-class MyError extends Error {
-  name = "MyError"
+export class MyError extends Error {
+  name = 'MyError'
 }

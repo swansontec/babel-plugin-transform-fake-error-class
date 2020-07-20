@@ -1,4 +1,4 @@
-function MyError(message) {
+export function MyError(message) {
   if (!(this instanceof MyError)) throw new TypeError("Class constructor MyError cannot be invoked without 'new'");
 
   var _this;

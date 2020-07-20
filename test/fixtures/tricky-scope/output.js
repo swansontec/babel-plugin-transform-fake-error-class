@@ -7,10 +7,12 @@ export function MyError(message) {
   const _this2 = 1;
   const _Error = 1;
   const _MyError = 1;
+  console.log(_this2, _Error, _MyError);
   Error.prototype.toString.call(_this);
   {
     const _Error2 = 2;
     const _MyError2 = 2;
+    console.log(_Error2, _MyError2);
     Error.prototype.toString.call(_this);
   }
   return _this;

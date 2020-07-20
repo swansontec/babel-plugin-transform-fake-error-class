@@ -20,11 +20,11 @@ export class MyError extends Error {
     console.log(super.toString())
   }
 
-  get getter() {
+  get accessor() {
     return this.property
   }
 
-  set setter(value) {
+  set accessor(value) {
     this.property = value
   }
 }

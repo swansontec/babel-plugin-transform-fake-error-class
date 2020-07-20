@@ -19,15 +19,15 @@ export function MyError(message) {
       configurable: true,
       writable: true
     });
-    Object.defineProperty(_this, getter, {
-      get: function getter() {
+    Object.defineProperty(_this, accessor, {
+      get: function accessor() {
         return _this.property;
       },
       configurable: true,
       writable: true
     });
-    Object.defineProperty(_this, setter, {
-      set: function setter(value) {
+    Object.defineProperty(_this, accessor, {
+      set: function accessor(value) {
         _this.property = value;
       },
       configurable: true,
